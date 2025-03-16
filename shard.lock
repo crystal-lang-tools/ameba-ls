@@ -6,7 +6,7 @@ shards:
 
   larimar:
     git: https://github.com/nobodywasishere/larimar.git
-    version: 0.1.0+git.commit.d2401677f1e873f6f59b6de6b4db045e703fd55a
+    version: 0.1.0+git.commit.d9f6bafdcd64732c7c93781ceeb5e53372078693
 
   lsprotocol:
     git: https://github.com/nobodywasishere/lsprotocol-crystal.git

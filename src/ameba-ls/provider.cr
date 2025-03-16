@@ -17,9 +17,8 @@ class AmebaProvider < Larimar::Provider
 
   include Larimar::CodeActionProvider
 
-  @document_version : Int32 = 0
-  @diagnostics : Array(LSProtocol::Diagnostic) = Array(LSProtocol::Diagnostic).new
-  @issues : Array(Ameba::Issue) = Array(Ameba::Issue).new
+  @diagnostics : Hash(URI, Array(LSProtocol::Diagnostic)) = Hash(URI, Array(LSProtocol::Diagnostic)).new
+  @issues : Hash(URI, Array(Ameba::Issue)) = Hash(URI, Array(Ameba::Issue)).new
 
   class DiagnosticsFormatter < Ameba::Formatter::BaseFormatter
     getter diagnostics : Array(LSProtocol::Diagnostic) = Array(LSProtocol::Diagnostic).new
@@ -117,9 +116,8 @@ class AmebaProvider < Larimar::Provider
     rescue CancellationException
     end
 
-    @issues = source.issues
-    @diagnostics = formatter.diagnostics
-    @document_version = document.version
+    @issues[document.uri] = source.issues
+    @diagnostics[document.uri] = formatter.diagnostics
 
     controller.server.send_msg(
       LSProtocol::PublishDiagnosticsNotification.new(
@@ -138,15 +136,46 @@ class AmebaProvider < Larimar::Provider
     token : CancellationToken?,
   ) : Array(LSProtocol::CodeAction | LSProtocol::Command)?
     result = [] of LSProtocol::CodeAction | LSProtocol::Command
+    diagnostics = @diagnostics[document.uri]?
+    issues = @issues[document.uri]?
 
-    if @document_version != document.version
+    if diagnostics.nil? || issues.nil?
       return
     end
 
-    @diagnostics.each_with_index do |diagnostic, idx|
-      break unless (issue = @issues[idx]?)
+    diagnostics.each_with_index do |diagnostic, idx|
+      break unless (issue = issues[idx]?)
       next unless issue.correctable?
 
+      result << LSProtocol::CodeAction.new(
+        title: "Fix #{issue.rule.name}",
+        diagnostics: [diagnostic],
+        is_preferred: true,
+        data: JSON::Any.new({
+          "uri" => JSON::Any.new(document.uri.to_s),
+          "idx" => JSON::Any.new(idx),
+        } of String => JSON::Any)
+      )
+    end
+
+    result
+  end
+
+  def resolve_code_action(
+    code_action : LSProtocol::CodeAction,
+    token : CancellationToken?,
+  ) : LSProtocol::CodeAction?
+    return unless (data = code_action.data.try(&.as_h?)) &&
+                  (document_uri_string = data["uri"]?.try(&.as_s?)) &&
+                  (document_uri = URI.parse(document_uri_string)) &&
+                  (document = controller.@documents[document_uri]?) &&
+                  (diagnostic = code_action.diagnostics.try(&.first?)) &&
+                  (issue_idx = data["idx"]?.try(&.as_i?)) &&
+                  (issue = @issues[document_uri]?.try(&.[issue_idx]))
+
+    result = nil
+
+    document.mutex.synchronize do
       corrector = Ameba::Source::Corrector.new(document.to_s)
       issue.correct(corrector)
 
@@ -157,7 +186,7 @@ class AmebaProvider < Larimar::Provider
         changes: {document.uri => text_edits}
       )
 
-      result << LSProtocol::CodeAction.new(
+      result = LSProtocol::CodeAction.new(
         title: "Fix #{issue.rule.name}",
         diagnostics: [diagnostic],
         is_preferred: true,
@@ -205,11 +234,5 @@ class AmebaProvider < Larimar::Provider
         get_text_edits(document, edits, child)
       end
     end
-  end
-
-  def resolve_code_action(
-    code_action : LSProtocol::CodeAction,
-    token : CancellationToken?,
-  ) : LSProtocol::CodeAction?
   end
 end
