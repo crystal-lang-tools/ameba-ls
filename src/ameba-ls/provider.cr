@@ -150,6 +150,7 @@ class AmebaProvider < Larimar::Provider
       result << LSProtocol::CodeAction.new(
         title: "Fix #{issue.rule.name}",
         diagnostics: [diagnostic],
+        kind: LSProtocol::CodeActionKind::QuickFix,
         is_preferred: true,
         data: JSON::Any.new({
           "uri" => JSON::Any.new(document.uri.to_s),
@@ -189,8 +190,9 @@ class AmebaProvider < Larimar::Provider
       result = LSProtocol::CodeAction.new(
         title: "Fix #{issue.rule.name}",
         diagnostics: [diagnostic],
+        edit: workspace_edit,
+        kind: LSProtocol::CodeActionKind::QuickFix,
         is_preferred: true,
-        edit: workspace_edit
       )
     end
 
