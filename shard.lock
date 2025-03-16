@@ -1,0 +1,22 @@
+version: 2.0
+shards:
+  ameba:
+    git: https://github.com/crystal-ameba/ameba.git
+    version: 1.6.4+git.commit.a21dea0b44642f4fc87429283f8b0dd9f1e47a9f
+
+  larimar:
+    git: https://github.com/nobodywasishere/larimar.git
+    version: 0.1.0+git.commit.4627e1c01b398aecfdda7d6d704d6b55fab94093
+
+  lsprotocol:
+    git: https://github.com/nobodywasishere/lsprotocol-crystal.git
+    version: 0.1.0+git.commit.28986890c7657af4aefea8355ca3f3c7fc2bc9dd
+
+  rwlock:
+    git: https://github.com/spider-gazelle/readers-writer.git
+    version: 1.0.7
+
+  tree_sitter:
+    git: https://github.com/crystal-lang-tools/crystal-tree-sitter.git
+    version: 0.1.0+git.commit.1d46ca231a641b30b8e7fbbae7eba050f7717a9f
+

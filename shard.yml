@@ -1,0 +1,20 @@
+name: ameba-ls
+version: 0.1.0
+
+authors:
+  - Margret Riegert <margret@eowyn.net>
+
+targets:
+  ameba-ls:
+    main: src/ameba-ls.cr
+
+crystal: ">= 1.15.1"
+
+license: MIT
+
+dependencies:
+  larimar:
+    github: nobodywasishere/larimar
+  ameba:
+    github: crystal-ameba/ameba
+    tag: v1.6.4
