@@ -1,4 +1,4 @@
-require "larimar"
+require "larimar/api/provider_server"
 require "ameba"
 
 require "./ameba-ls/provider"
