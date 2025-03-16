@@ -4,7 +4,7 @@ Language server for the [Ameba](https://github.com/crystal-ameba/ameba) linter f
 
 Supports reporting issues while typing, and correcting issues via code actions. Does not require `ameba` be installed.
 
-![](./assets/output.mp4)
+![](/assets/output.gif)
 
 ## Installation
 
