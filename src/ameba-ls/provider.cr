@@ -27,6 +27,8 @@ class AmebaProvider < Larimar::Provider
 
     def source_finished(source : Ameba::Source) : Nil
       source.issues.each do |issue|
+        next if issue.disabled?
+
         cancellation_token.try &.cancelled!
 
         start_location = LSProtocol::Position.new(
