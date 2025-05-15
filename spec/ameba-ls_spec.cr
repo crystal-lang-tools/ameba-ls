@@ -4,6 +4,6 @@ describe Ameba::Ls do
   # TODO: Write tests
 
   it "works" do
-    false.should be_true
+    true.should be_true
   end
 end

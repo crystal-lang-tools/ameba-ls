@@ -3,6 +3,7 @@ require "ameba"
 require "option_parser"
 
 require "./ameba-ls/provider"
+include Ameba::Ls
 
 OptionParser.parse do |parser|
   parser.banner = "language server for the ameba linter for crystal lang"
