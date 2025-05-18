@@ -1,2 +1,3 @@
 require "spec"
-require "../src/ameba-ls"
+require "larimar/api/provider_server"
+require "../src/ameba-ls/provider.cr"

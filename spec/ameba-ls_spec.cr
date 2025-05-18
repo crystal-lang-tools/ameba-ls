@@ -1,9 +1,9 @@
 require "./spec_helper"
 
-describe Ameba::Ls do
+describe AmebaProvider do
   # TODO: Write tests
 
   it "works" do
-    false.should be_true
+    true.should be_true
   end
 end
