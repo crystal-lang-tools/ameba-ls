@@ -11,10 +11,12 @@ OptionParser.parse do |parser|
     puts "version: " + {{ env("APP_VERSION") || "dev" }}
     exit
   end
+
   parser.on "-h", "--help", "Show help" do
     puts parser
     exit
   end
+
   parser.invalid_option do |option_flag|
     STDERR.puts "ERROR: #{option_flag} is not a valid option."
     STDERR.puts parser
