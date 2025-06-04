@@ -1,3 +1,5 @@
+name: Ameba
+
 on:
   push:
   pull_request:
@@ -5,9 +7,10 @@ on:
 
 jobs:
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
         ameba-version: [v1.6.4]
 
     steps:
@@ -23,7 +26,7 @@ jobs:
         id: cache-ameba
         uses: actions/cache@v4.2.2
         with:
-          path: bin/ameba
+          path: bin/ameba${{ runner.os == 'Windows' && '.exe' || '' }}
           key: ${{ runner.os }}-ameba-${{ matrix.ameba-version }}
 
       - name: Build Ameba
@@ -31,11 +34,11 @@ jobs:
         run: |
           git clone --branch ${{ matrix.ameba-version }} --single-branch https://github.com/crystal-ameba/ameba.git
           cd ameba
-          make bin/ameba CRFLAGS='-Dpreview_mt --release --no-debug'
+          make bin/ameba CRFLAGS='-Dpreview_mt --no-debug'
           mkdir -p ../bin
-          mv bin/ameba ../bin/ameba
+          mv bin/ameba${{ runner.os == 'Windows' && '.exe' || '' }} ../bin/
           cd ..
-          rm -rf ameba
+          ${{ runner.os == 'Windows' && 'Remove-Item -Path "ameba" -Recurse -Force' || 'rm -rf ameba' }}
 
       - name: Run Ameba Linter
-        run: bin/ameba -c .ameba.yml
+        run: bin/ameba${{ runner.os == 'Windows' && '.exe' || '' }} -c .ameba.yml ${{ runner.os == 'Windows' && '--except Layout/TrailingWhitespace,Lint/Formatting' || '' }}
