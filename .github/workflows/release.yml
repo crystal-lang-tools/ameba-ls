@@ -57,7 +57,7 @@ jobs:
         uses: docker://ghcr.io/luislavena/crystal-xbuild:tip
         with:
           entrypoint: xbuild
-          args: src/cli.cr ameba-ls ${{ matrix.platform }}
+          args: src/ameba-ls.cr ameba-ls ${{ matrix.platform }}
 
       - name: Create tarball
         run: |
