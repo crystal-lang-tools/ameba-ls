@@ -2,8 +2,10 @@ name: Ameba
 
 on:
   push:
+    paths:
+      - "**/*.cr"
   pull_request:
-    branches: [master]
+    branches: [main]
     paths:
       - "**/*.cr"
 
