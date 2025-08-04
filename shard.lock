@@ -2,11 +2,11 @@ version: 2.0
 shards:
   ameba:
     git: https://github.com/crystal-ameba/ameba.git
-    version: 1.6.4+git.commit.a21dea0b44642f4fc87429283f8b0dd9f1e47a9f
+    version: 1.7.0-dev+git.commit.a49f9573a5a984e21b05a39d4e1da17e103b0925
 
   larimar:
     git: https://github.com/nobodywasishere/larimar.git
-    version: 0.1.0+git.commit.97d37e665f7189a7ec35f54fb65003a8438d6cf0
+    version: 0.1.0+git.commit.84872f191466e41eb986a905e1559ffb8f160684
 
   lsprotocol:
     git: https://github.com/nobodywasishere/lsprotocol-crystal.git

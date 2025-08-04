@@ -1,5 +1,5 @@
-require "larimar/api/provider_server"
 require "ameba"
+require "larimar/api/provider_server"
 require "option_parser"
 
 require "./ameba-ls/provider"
