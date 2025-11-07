@@ -18,4 +18,4 @@ dependencies:
   ameba:
     github: crystal-ameba/ameba
     # tag: v1.6.4
-    commit: a49f9573a5a984e21b05a39d4e1da17e103b0925 # 1.7.0-dev
+    commit: 29d00ad3b36ae916f8bdf0065e3edaf5275dabb8 # 1.7.0-dev
